@@ -1,4 +1,5 @@
-const fs = require("fs");
+import fs from "fs";
+import fetch from "node-fetch";
 
 fetch(`http://abc.com/xyz.json`, {
   method: "GET",
@@ -7,18 +8,18 @@ fetch(`http://abc.com/xyz.json`, {
   },
 })
   .then(response => {
-    return response.json()
+    if (response) {
+      fs.writeFile("./data/abc.txt", JSON.stringify(response), function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+      }); 
+    } else {
+      console.log("Empty Data");
+    }
   })
-  .then(json => {
-    console.log(json);
-    fs.writeFile(`./data/abc.txt`, json, (err) => {
-      if (err) {
-        console.log(`Error writing file with error = `, err);
-      } else {
-        console.log(`Successfully wrote file`);
-      }
-    });
-  })
+
   .catch(error => {
     console.log(error)
   });
